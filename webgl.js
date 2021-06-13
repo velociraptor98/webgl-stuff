@@ -28,6 +28,8 @@ let fragmentShaderText = [
 ].join('\n');
 
 
+
+
 let initTriangle = () => {
     let canvas = document.getElementById("webgl-surface");
     let gl = canvas.getContext("webgl");
@@ -131,70 +133,8 @@ let initTriangle = () => {
    gl.drawArrays(gl.TRIANGLES, 0, 3); //Last param is number of points
 }
 
-let initCube = () => {
-    let canvas = document.getElementById("webgl-surface");
-    let gl = canvas.getContext("webgl");
-    // Check if gl context supported else try with experimental
-    if(!gl){
-        console.log('using experimental-webgl');
-        gl = canvas.getContext("experimental-webgl");
-    }
-    if(!gl){
-        alert("Web gl is not supported on current browser");
-    }
-    gl.clearColor(0.5,0.5,0.5,1.0);
-    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-    // Add a basic vertex and fragment shader
-    let vertexShader = gl.createShader(gl.VERTEX_SHADER);
-    let fragmentShader = gl.createShader(gl.FRAGMENT_SHADER);
-    gl.shaderSource(vertexShader,vertexShaderText);
-    gl.shaderSource(fragmentShader,fragmentShaderText);
-    gl.compileShader(vertexShader);
-    gl.compileShader(fragmentShader);
 
-    // Create basic program
-    let program = gl.createProgram();
-    gl.attachShader(program,vertexShader);
-    gl.attachShader(program,fragmentShader);
-    gl.linkProgram(program);
-    gl.validateProgram(program);
 
-    // Buffer
-
-    let triangleVert = [
-        0.0,0.5, 1.0,1.0,0.0,
-        -0.5,-0.5,0.7,0.0,1.0,
-        0.5,-0.5,0.0,0.0,0.8,
-    ];
-    let trianlgeVertBufferObject = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER,trianlgeVertBufferObject);
-    gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(triangleVert),gl.STATIC_DRAW);
-    let positionAttribLocation = gl.getAttribLocation(program,'vertPosition');
-    let colorAttribLocation = gl.getAttribLocation(program,'vertColor');
-    gl.vertexAttribPointer(
-        positionAttribLocation,
-        2, // elements in each attrib
-        gl.FLOAT,
-        gl.FALSE,
-        5 * Float32Array.BYTES_PER_ELEMENT,
-        0
-    );
-    gl.vertexAttribPointer(
-        colorAttribLocation,
-        3, // elements in each attrib
-        gl.FLOAT,
-        gl.FALSE,
-        5 * Float32Array.BYTES_PER_ELEMENT,
-        2 * Float32Array.BYTES_PER_ELEMENT,
-    );
-    gl.enableVertexAttribArray(positionAttribLocation);
-    gl.enableVertexAttribArray(colorAttribLocation);
-
-    // Rendering Loop
-   gl.useProgram(program);
-   gl.drawArrays(gl.TRIANGLES, 0, 3); //Last param is number of points
-}
-initTriangle();
 
 
 
